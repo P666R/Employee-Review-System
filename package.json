@@ -4,7 +4,7 @@
   "description": "Employee Review System",
   "main": "server.js",
   "scripts": {
-    "start:dev": "nodemon server.js"
+    "start": "nodemon server.js"
   },
   "author": "PRoy",
   "license": "ISC",
