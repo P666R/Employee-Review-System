@@ -4,20 +4,29 @@ const MongoStore = require('connect-mongo');
 const expressLayouts = require('express-ejs-layouts');
 const passport = require('passport');
 const path = require('path');
-const passportLocal = require('./config/passportLocal');
+const flash = require('connect-flash');
 
+const passportLocal = require('./config/passportLocal');
+const flashMiddleWare = require('./config/flashMiddleware');
+
+// Import main router
 const mainRouter = require('./routes/index');
 
+// Create Express application
 const app = express();
 
-app.use(express.urlencoded());
+// Parse URL-encoded bodies
+app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static(path(__dirname, './public')));
+// Serve static files from the 'public' directory
+app.use(express.static(path.join(__dirname, './public')));
 
+// Use EJS layouts
 app.use(expressLayouts);
 
+// Set the view engine to EJS and specify the views directory
 app.set('view engine', 'ejs');
-app.set('views', path(__dirname, './views'));
+app.set('views', path.join(__dirname, './views'));
 
 // Configure the session middleware
 app.use(
@@ -62,8 +71,15 @@ app.use(passport.initialize());
 // Use Passport session middleware for persistent login sessions
 app.use(passport.session());
 
+// Middleware to set the authenticated user on the request object
 app.use(passport.setAuthenticatedUser);
 
+// Middleware to use flash messages
+app.use(flash());
+app.use(flashMiddleWare.setFlash);
+
+// Use the main router for handling routes starting with '/'
 app.use('/', mainRouter);
 
+// Export the Express application
 module.exports = app;

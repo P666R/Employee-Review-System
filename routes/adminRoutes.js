@@ -1,25 +1,18 @@
 const express = require('express');
-const router = express.Router();
 const passport = require('passport');
+const adminController = require('../controllers/adminController');
+const authController = require('../controllers/authController');
 
-router.get('/', passport.checkAuthentication, adminController.adminDashboard);
+const router = express.Router();
 
-router.post(
-  '/makeAdmin',
-  passport.checkAuthentication,
-  adminController.makeAdmin
-);
+router.use(passport.checkAuthentication, authController.isAdmin);
 
-router.post(
-  '/assignReview',
-  passport.checkAuthentication,
-  adminController.assignReview
-);
+router.get('/', adminController.adminDashboard);
 
-router.delete(
-  '/deleteEmployee/:id',
-  passport.checkAuthentication,
-  adminController.deleteEmployee
-);
+router.post('/makeAdmin', adminController.makeAdmin);
+
+router.post('/assignReview', adminController.assignReview);
+
+router.get('/deleteEmployee/:id', adminController.deleteEmployee);
 
 module.exports = router;
