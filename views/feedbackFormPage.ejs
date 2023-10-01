@@ -1,0 +1,27 @@
+<section class="feedback">
+  <form action="#" method="POST" class="feedback__form">
+    <h3 class="heading-1--mod">Welcome to employee feedback page</h3>
+    <div class="feedback__item heading-3">
+      <label for="reviewee">Select reviewee</label>
+
+      <select name="reviewee" id="reviewee">
+        <option value="">--Please choose a reviewee--</option>
+        <option value="reviewer1">reviewee1</option>
+        <option value="reviewer2">reviewee2</option>
+        <option value="reviewer3">reviewee3</option>
+      </select>
+    </div>
+
+    <div class="feedback__item heading-3">
+      <label for="feedbackText">Feedback</label>
+      <textarea
+        id="feedbackText"
+        name="feedbackText"
+        placeholder="Feedback..."
+        required
+      ></textarea>
+    </div>
+
+    <button class="btn" type="submit">Create</button>
+  </form>
+</section>

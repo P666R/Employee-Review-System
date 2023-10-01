@@ -1,0 +1,31 @@
+<section class="admin">
+  <% employees.forEach(employee => { %>
+    <form action="#" method="POST" class="admin__form">
+      <div class="admin__item heading-3">
+        <label for="name">Name</label>
+        <input type="text" id="name" name="name" value="<%= employee.name %>" disabled />
+      </div>
+
+      <div class="admin__item heading-3">
+        <label for="email">Email</label>
+        <input type="email" id="email" name="email" value="<%= employee.email %>" disabled />
+      </div>
+
+      <div class="admin__item admin__item--reviewee heading-3">
+        <label for="isAdmin">Admin</label>
+        <select name="isAdmin" id="isAdmin">
+          <option value="true" <%= employee.isAdmin ? 'selected' : '' %>>Yes</option>
+          <option value="false" <%= !employee.isAdmin ? 'selected' : '' %>>No</option>
+        </select>
+      </div>
+
+      <input type="hidden" name="userId" value="<%= employee._id %>" />
+
+      <button class="btn" type="submit">Change role</button>
+
+      <button class="btn" type="button">
+        <a href="/admin/deleteEmployee/<%= employee._id %>">Delete</a>
+      </button>
+    </form>
+  <% }); %>
+</section>

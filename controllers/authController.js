@@ -4,7 +4,9 @@ const bcrypt = require('bcrypt');
 
 // Render the registration form view
 exports.registerForm = (req, res) => {
-  res.render('auth/register');
+  res.render('signupPage', {
+    title: 'Signup - Nexter ERS',
+  });
 };
 
 // Process the registration form data
@@ -45,7 +47,9 @@ exports.register = async (req, res) => {
 
 // Render the login form view
 exports.loginForm = (req, res) => {
-  res.render('auth/login');
+  res.render('signinPage', {
+    title: 'Signin - Nexter ERS',
+  });
 };
 
 // Process the login form data
@@ -67,6 +71,7 @@ exports.login = (req, res, next) => {
 
       // Redirect the user to the appropriate page based on their role
       const redirectURL = user.isAdmin ? '/admin' : '/employee';
+      req.flash('success', 'Logged in successfully');
       return res.redirect(redirectURL);
     });
   })(req, res, next);
@@ -74,21 +79,33 @@ exports.login = (req, res, next) => {
 
 // Log out the user
 exports.logout = (req, res) => {
-  req.logout();
+  req.logout((err) => {
+    if (err) {
+      req.flash('error', 'Error during logout');
+      return done(err);
+    }
+  });
   // Display a success message and redirect to the login page
   req.flash('success', 'Logged out successfully');
-  res.redirect('/auth/login');
+  res.redirect('/');
 };
 
 // Middleware to check if the user is an admin
 exports.isAdmin = (req, res, next) => {
   if (!req.user.isAdmin) {
-    // Display an error message if the user is not authorized
-    req.flash(
-      'error',
-      'You are not authorized. Only admin can access this page'
-    );
+    // Display an error message if the user is not admin
+    req.flash('error', 'Only admin can access this page');
     return res.redirect('/auth/login');
   }
+  return next();
+};
+
+exports.isNotAdmin = (req, res, next) => {
+  if (req.user.isAdmin) {
+    // Display an error message if the user is an admin
+    req.flash('error', 'Admin cannot access this page');
+    return res.redirect('/auth/login');
+  }
+  // User is not an admin, proceed to the next middleware/route handler
   return next();
 };

@@ -11,8 +11,10 @@ router.get('/', adminController.adminDashboard);
 
 router.post('/makeAdmin', adminController.makeAdmin);
 
-router.post('/assignReview', adminController.assignReview);
-
 router.get('/deleteEmployee/:id', adminController.deleteEmployee);
+
+router.get('/assignReview', adminController.getReviewers);
+router.post('/assignReview', adminController.getReviewees);
+router.post('/assignReview/submit', adminController.assignReview);
 
 module.exports = router;

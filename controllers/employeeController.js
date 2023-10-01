@@ -11,9 +11,14 @@ exports.employeeDashboard = async (req, res) => {
       Review.find({ reviewee: loggedInUserId }),
     ]);
 
-    const user = await User.findById(loggedInUserId);
+    // const user = await User.findById(loggedInUserId);
 
-    res.render('employee/dashboard', { reviewsGiven, reviewsReceived, user });
+    res.render('employeeDashboard', {
+      title: 'Nexter - Employee page',
+      // user,
+      reviewsGiven,
+      reviewsReceived,
+    });
   } catch (error) {
     console.error(error);
     req.flash('error', 'Error occurred while fetching data');

@@ -1,0 +1,56 @@
+<section class="review">
+  <div class="review__container">
+    <% if (!selectedReviewer) { %>
+    <h2 class="heading-3 tm">
+      Select a reviewer to get all eligible reviewees for same
+    </h2>
+    <form
+      action="/admin/assignReview"
+      method="POST"
+      class="review__item heading-3"
+    >
+      <label for="reviewerId">Select a Reviewer:</label>
+      <select name="reviewerId" id="reviewerId">
+        <option value="" disabled selected>
+          -- Please choose a reviewer --
+        </option>
+        <% reviewers.forEach(reviewer => { %>
+        <option value="<%= reviewer._id %>"><%= reviewer.name %></option>
+        <% }); %>
+      </select>
+      <button class="btn btn-re" type="submit">Get Eligible Reviewees</button>
+    </form>
+    <% } %>
+    <!--  -->
+    <% if (selectedReviewer && reviewees.length > 0) { %>
+    <h2 class="heading-3 tm">
+      All eligible reviewees for selected reviewer: <%= selectedReviewer.name %>
+    </h2>
+    <form
+      action="/admin/assignReview/submit"
+      method="POST"
+      class="review__item heading-3"
+    >
+      <input
+        type="hidden"
+        name="reviewerId"
+        value="<%= selectedReviewer._id %>"
+      />
+      <label for="revieweeId">Select a Reviewee:</label>
+      <select name="revieweeId" id="revieweeId">
+        <option value="" disabled selected>
+          -- Please choose a reviewee --
+        </option>
+        <% reviewees.forEach(reviewee => { %>
+        <option value="<%= reviewee._id %>"><%= reviewee.name %></option>
+        <% }); %>
+      </select>
+      <button class="btn btn-re" type="submit">Assign Work</button>
+    </form>
+    <% } else if (selectedReviewer) { %>
+    <h2 class="heading-3 tm">
+      No eligible reviewees available for reviewer <%= selectedReviewer.name %>
+    </h2>
+    <% } %>
+  </div>
+</section>

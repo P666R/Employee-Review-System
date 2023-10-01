@@ -2,17 +2,19 @@ const express = require('express');
 const authRouter = require('./authRoutes');
 const adminRouter = require('./adminRoutes');
 const employeeRouter = require('./employeeRoutes');
-const passport = require('passport');
+// const passport = require('passport');
 
 const router = express.Router();
 
 // here we will show the landing page
 router.get('/', (req, res) => {
-  res.send('hello');
+  res.render('homePage', {
+    title: 'Welcome - Nexter ERS',
+  });
 });
 
-router.route('/auth', authRouter);
-router.route('/admin', adminRouter);
-router.route('/employee', employeeRouter);
+router.use('/auth', authRouter);
+router.use('/admin', adminRouter);
+router.use('/employee', employeeRouter);
 
 module.exports = router;

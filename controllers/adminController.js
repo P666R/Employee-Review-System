@@ -5,7 +5,7 @@ exports.adminDashboard = async (req, res) => {
   try {
     const employees = await User.find();
 
-    return res.render('employeePage', {
+    return res.render('adminDashboard', {
       title: 'Nexter - Admin page',
       employees,
     });
@@ -25,7 +25,7 @@ exports.makeAdmin = async (req, res) => {
       return res.redirect('back');
     }
 
-    user.isAdmin = true;
+    user.isAdmin = !user.isAdmin;
     await user.save();
 
     req.flash('success', 'Employee is now an admin');
@@ -37,35 +37,93 @@ exports.makeAdmin = async (req, res) => {
   }
 };
 
-exports.assignReview = async (req, res) => {
-  const { reviewerId, revieweeId } = req.body;
-
+exports.getReviewers = async (req, res) => {
   try {
-    if (reviewerId === revieweeId) {
-      req.flash('error', 'Reviewer and reviewee cannot be the same user');
-      return res.redirect('back');
-    }
+    const reviewers = await User.find({ isAdmin: false });
 
-    const [reviewer, reviewee] = await Promise.all([
-      User.findById(reviewerId),
-      User.findById(revieweeId),
-    ]);
-
-    if (!reviewer || !reviewee) {
-      req.flash('error', 'Invalid reviewer or reviewee');
-      return res.redirect('back');
-    }
-
-    reviewer.usersToReview.push(revieweeId);
-
-    await reviewer.save();
-
-    req.flash('success', 'Review assigned successfully');
-    res.redirect('back');
+    res.render('assignReviewPage', {
+      title: 'Nexter - Assign Review',
+      reviewers,
+      selectedReviewer: null,
+    });
   } catch (error) {
     console.error(error);
-    req.flash('error', 'Error occurred while assigning the review');
+    req.flash('error', 'Error while fetching reviewers');
     res.redirect('back');
+  }
+};
+
+exports.getReviewees = async (req, res) => {
+  try {
+    const { reviewerId } = req.body;
+
+    // Find the selected reviewer
+    const selectedReviewer = await User.findById(reviewerId);
+
+    // Find users who are not admins
+    let reviewees = await User.find({
+      isAdmin: false,
+      _id: { $ne: reviewerId }, // Exclude the selected reviewer
+    });
+
+    // If usersToReview is not empty for the selected reviewer, exclude them
+    if (selectedReviewer.usersToReview.length > 0) {
+      reviewees = reviewees.filter((reviewee) => {
+        return !selectedReviewer.usersToReview.includes(
+          reviewee._id.toString()
+        );
+      });
+    }
+
+    // Find existing reviews where the selected reviewer is the reviewer
+    const existingReviews = await Review.find({
+      reviewer: reviewerId,
+    });
+
+    // Exclude users who have already received a review from the selected reviewer
+    const eligibleReviewees = reviewees.filter((reviewee) => {
+      return !existingReviews.some((review) =>
+        review.reviewee.equals(reviewee._id)
+      );
+    });
+
+    res.render('assignReviewPage', {
+      title: 'Nexter - Assign Review',
+      selectedReviewer,
+      reviewees: eligibleReviewees,
+      reviewers: [],
+    });
+  } catch (error) {
+    console.error(error);
+    req.flash('error', 'Error while fetching reviewees');
+    res.redirect('back');
+  }
+};
+
+exports.assignReview = async (req, res) => {
+  try {
+    const { reviewerId, revieweeId } = req.body;
+
+    // Find the selected reviewer
+    const selectedReviewer = await User.findById(reviewerId);
+
+    // Find the selected reviewee
+    const selectedReviewee = await User.findById(revieweeId);
+
+    // Update the selected reviewer's usersToReview array to include the selected reviewee
+    selectedReviewer.usersToReview.push(selectedReviewee._id);
+
+    // Save the changes to the database
+    await selectedReviewer.save();
+
+    // Optionally, you can create a new Review document to store this assignment in your database.
+
+    req.flash('success', 'Review assigned successfully');
+    res.redirect('/admin/assignReview'); // Redirect to the page with the list of reviewers
+  } catch (error) {
+    console.error(error);
+    req.flash('error', 'Error occurred while assigning review');
+    res.redirect('/admin/assignReview'); // Redirect back to the page with the list of reviewers
   }
 };
 
@@ -79,11 +137,16 @@ exports.deleteEmployee = async (req, res) => {
       return res.redirect('back');
     }
 
+    // Remove the employee ID from other users' usersToReview arrays
+    await User.updateMany(
+      { _id: { $ne: employee._id } }, // Exclude the current employee
+      { $pull: { usersToReview: employee._id } }
+    );
+
     // Delete all reviews where the employee is the reviewer or the reviewee
-    await Promise.all([
-      Review.deleteMany({ reviewer: employee._id }),
-      Review.deleteMany({ reviewee: employee._id }),
-    ]);
+    await Review.deleteMany({
+      $or: [{ reviewer: employee._id }, { reviewee: employee._id }],
+    });
 
     // Delete the employee
     await User.findByIdAndDelete(id);
