@@ -1,73 +1,47 @@
 <section class="employees">
+  <% if (user.usersToReview.length > 0) { %>
   <div class="employees__pending">
-    <h3 class="heading-3">Pending reviews of Sam:</h3>
+    <h3 class="heading-3">Pending reviews of <%= user.name %>:</h3>
 
+    <% user.usersToReview.forEach(reviewee => { %>
     <div>
-      <p>To : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work</span></p>
+      <p>For: <span><%= reviewee.name %></span></p>
     </div>
-
-    <div>
-      <p>To : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work very good excellent</span></p>
-    </div>
-
-    <div>
-      <p>To : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work</span></p>
-    </div>
-
-    <div>
-      <p>To : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work</span></p>
-    </div>
+    <% }); %>
   </div>
-
+  <% } else { %>
+  <div class="employees__pending">
+    <h3 class="heading-3">No pending reviews for <%= user.name %></h3>
+  </div>
+  <% } %> <% if (reviewsGiven.length > 0) { %>
   <div class="employees__reviewer">
-    <h3 class="heading-3">Reviews provided By Sam:</h3>
+    <h3 class="heading-3">Reviews provided by <%= user.name %>:</h3>
 
+    <% reviewsGiven.forEach(review => { %>
     <div>
-      <p>To : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work</span></p>
+      <p>To: <span><%= review.reviewee.name %></span></p>
+      <p>Feedback: <span><%= review.review %></span></p>
     </div>
-
-    <div>
-      <p>To : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work very good excellent</span></p>
-    </div>
-
-    <div>
-      <p>To : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work</span></p>
-    </div>
-
-    <div>
-      <p>To : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work</span></p>
-    </div>
+    <% }); %>
   </div>
-
+  <% } else { %>
+  <div class="employees__reviewer">
+    <h3 class="heading-3">No reviews given by <%= user.name %></h3>
+  </div>
+  <% } %> <% if (reviewsReceived.length > 0) { %>
   <div class="employees__reviewee">
-    <h3 class="heading-3">Reviews Recieved by Sam:</h3>
+    <h3 class="heading-3">Reviews received by <%= user.name %>:</h3>
 
+    <% reviewsReceived.forEach(review => { %>
     <div>
-      <p>From : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work</span></p>
+      <p>From: <span><%= review.reviewer.name %></span></p>
+      <p>Feedback: <span><%= review.review %></span></p>
     </div>
-
-    <div>
-      <p>From : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work there</span></p>
-    </div>
-
-    <div>
-      <p>From : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work very good excellent</span></p>
-    </div>
-
-    <div>
-      <p>From : <span>Ram</span></p>
-      <p>Feedback : <span>Nice work</span></p>
-    </div>
+    <% }); %>
   </div>
+  <% } else { %>
+  <div class="employees__reviewee">
+    <h3 class="heading-3">No reviews received by <%= user.name %></h3>
+  </div>
+  <% } %>
 </section>

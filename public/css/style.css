@@ -21,10 +21,9 @@ body {
 .container {
   display: grid;
   grid-template-rows: 15vh 70vh 15vh;
-  grid-template-columns: [full-start] 1fr [center-start] repeat(
-      12,
-      [col-start] 1fr [col-end]
-    ) [center-end] 1fr [full-end];
+  grid-template-columns:
+    [full-start] 1fr [center-start] repeat(12, [col-start] 1fr [col-end])
+    [center-end] 1fr [full-end];
 }
 
 .heading-5,
@@ -246,7 +245,6 @@ body {
   grid-template-columns: max-content;
   row-gap: 1rem;
   justify-content: center;
-  align-content: center;
   border: 1px solid rgba(198, 153, 99, 0.9);
 }
 .employees p {

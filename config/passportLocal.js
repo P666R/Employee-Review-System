@@ -69,7 +69,7 @@ passport.checkAuthentication = function (req, res, next) {
   }
 
   // If not authenticated, redirect the user to the login page
-  return res.redirect('/users/login');
+  return res.redirect('/auth/login');
 };
 
 // Middleware to set the authenticated user in the response locals

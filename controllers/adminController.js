@@ -28,11 +28,15 @@ exports.makeAdmin = async (req, res) => {
     user.isAdmin = !user.isAdmin;
     await user.save();
 
-    req.flash('success', 'Employee is now an admin');
+    req.flash(
+      'success',
+      `Employee is now ${user.isAdmin ? 'an admin' : 'not an admin'}`
+    );
+
     res.redirect('back');
   } catch (error) {
     console.error(error);
-    req.flash('error', 'Error occurred while making the employee an admin');
+    req.flash('error', 'Error occurred while changing role of user');
     res.redirect('back');
   }
 };

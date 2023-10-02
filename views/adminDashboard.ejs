@@ -1,6 +1,6 @@
 <section class="admin">
   <% employees.forEach(employee => { %>
-    <form action="#" method="POST" class="admin__form">
+    <form action="/admin/makeAdmin" method="POST" class="admin__form">
       <div class="admin__item heading-3">
         <label for="name">Name</label>
         <input type="text" id="name" name="name" value="<%= employee.name %>" disabled />

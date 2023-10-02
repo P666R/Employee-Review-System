@@ -1,22 +1,22 @@
 <section class="feedback">
-  <form action="#" method="POST" class="feedback__form">
-    <h3 class="heading-1--mod">Welcome to employee feedback page</h3>
+  <form action="/employee/submitFeedback" method="POST" class="feedback__form">
+    <h3 class="heading-1--mod">Welcome to feedback page, <%= user.name %>!</h3>
+
     <div class="feedback__item heading-3">
       <label for="reviewee">Select reviewee</label>
-
-      <select name="reviewee" id="reviewee">
-        <option value="">--Please choose a reviewee--</option>
-        <option value="reviewer1">reviewee1</option>
-        <option value="reviewer2">reviewee2</option>
-        <option value="reviewer3">reviewee3</option>
+      <select name="revieweeId" id="reviewee" required>
+        <option value="" disabled selected>--Please choose a reviewee--</option>
+        <% reviewees.forEach(reviewee => { %>
+        <option value="<%= reviewee._id %>"><%= reviewee.name %></option>
+        <% }); %>
       </select>
     </div>
 
     <div class="feedback__item heading-3">
-      <label for="feedbackText">Feedback</label>
+      <label for="review">Feedback</label>
       <textarea
-        id="feedbackText"
-        name="feedbackText"
+        id="review"
+        name="review"
         placeholder="Feedback..."
         required
       ></textarea>

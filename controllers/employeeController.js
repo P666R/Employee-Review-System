@@ -1,21 +1,20 @@
-const Review = require('../models/reviewModel');
 const User = require('../models/userModel');
+const Review = require('../models/reviewModel');
 
 exports.employeeDashboard = async (req, res) => {
   try {
     const loggedInUserId = req.user._id;
 
-    //  might need to use populate
     const [reviewsGiven, reviewsReceived] = await Promise.all([
-      Review.find({ reviewer: loggedInUserId }),
-      Review.find({ reviewee: loggedInUserId }),
+      Review.find({ reviewer: loggedInUserId }).populate('reviewee'),
+      Review.find({ reviewee: loggedInUserId }).populate('reviewer'),
     ]);
 
-    // const user = await User.findById(loggedInUserId);
+    const user = await User.findById(loggedInUserId).populate('usersToReview');
 
     res.render('employeeDashboard', {
       title: 'Nexter - Employee page',
-      // user,
+      user,
       reviewsGiven,
       reviewsReceived,
     });
@@ -35,7 +34,11 @@ exports.showFeedbackForm = async (req, res) => {
     const reviewees = loggedInUser.usersToReview;
 
     // Render the feedback form with the list of reviewees
-    res.render('employee/feedback', { reviewees });
+    res.render('feedbackFormPage', {
+      title: 'Nexter - Feedback form',
+      reviewees,
+      user: loggedInUser,
+    });
   } catch (error) {
     console.error(error);
     req.flash('error', 'Error occurred while fetching data');
@@ -44,7 +47,7 @@ exports.showFeedbackForm = async (req, res) => {
 };
 
 exports.submitFeedback = async (req, res) => {
-  const { revieweeId, reviewText } = req.body;
+  const { revieweeId, review } = req.body;
   const reviewerId = req.user._id;
 
   try {
@@ -56,7 +59,7 @@ exports.submitFeedback = async (req, res) => {
     }
 
     const newReview = {
-      review: reviewText,
+      review: review,
       reviewer: reviewerId,
       reviewee: revieweeId,
     };
