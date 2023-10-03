@@ -1,4 +1,4 @@
-module.exports.setFlash = function (req, res, next) {
+const setFlash = function (req, res, next) {
   res.locals.flash = {
     success: req.flash('success'),
     error: req.flash('error'),
@@ -6,3 +6,5 @@ module.exports.setFlash = function (req, res, next) {
 
   next();
 };
+
+module.exports = setFlash;

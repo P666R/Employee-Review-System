@@ -10,7 +10,6 @@ exports.adminDashboard = async (req, res) => {
       employees,
     });
   } catch (error) {
-    console.error(error);
     req.flash('error', 'Error occurred while fetching data');
     res.redirect('back');
   }
@@ -30,12 +29,11 @@ exports.makeAdmin = async (req, res) => {
 
     req.flash(
       'success',
-      `Employee is now ${user.isAdmin ? 'an admin' : 'not an admin'}`
+      `Employee is now ${user.isAdmin ? 'an admin' : 'not an admin'}`,
     );
 
     res.redirect('back');
   } catch (error) {
-    console.error(error);
     req.flash('error', 'Error occurred while changing role of user');
     res.redirect('back');
   }
@@ -51,7 +49,6 @@ exports.getReviewers = async (req, res) => {
       selectedReviewer: null,
     });
   } catch (error) {
-    console.error(error);
     req.flash('error', 'Error while fetching reviewers');
     res.redirect('back');
   }
@@ -72,11 +69,10 @@ exports.getReviewees = async (req, res) => {
 
     // If usersToReview is not empty for the selected reviewer, exclude them
     if (selectedReviewer.usersToReview.length > 0) {
-      reviewees = reviewees.filter((reviewee) => {
-        return !selectedReviewer.usersToReview.includes(
-          reviewee._id.toString()
-        );
-      });
+      reviewees = reviewees.filter(
+        (reviewee) =>
+          !selectedReviewer.usersToReview.includes(reviewee._id.toString()),
+      );
     }
 
     // Find existing reviews where the selected reviewer is the reviewer
@@ -85,11 +81,10 @@ exports.getReviewees = async (req, res) => {
     });
 
     // Exclude users who have already received a review from the selected reviewer
-    const eligibleReviewees = reviewees.filter((reviewee) => {
-      return !existingReviews.some((review) =>
-        review.reviewee.equals(reviewee._id)
-      );
-    });
+    const eligibleReviewees = reviewees.filter(
+      (reviewee) =>
+        !existingReviews.some((review) => review.reviewee.equals(reviewee._id)),
+    );
 
     res.render('assignReviewPage', {
       title: 'Nexter - Assign Review',
@@ -98,7 +93,6 @@ exports.getReviewees = async (req, res) => {
       reviewers: [],
     });
   } catch (error) {
-    console.error(error);
     req.flash('error', 'Error while fetching reviewees');
     res.redirect('back');
   }
@@ -125,7 +119,6 @@ exports.assignReview = async (req, res) => {
     req.flash('success', 'Review assigned successfully');
     res.redirect('/admin/assignReview'); // Redirect to the page with the list of reviewers
   } catch (error) {
-    console.error(error);
     req.flash('error', 'Error occurred while assigning review');
     res.redirect('/admin/assignReview'); // Redirect back to the page with the list of reviewers
   }
@@ -144,7 +137,7 @@ exports.deleteEmployee = async (req, res) => {
     // Remove the employee ID from other users' usersToReview arrays
     await User.updateMany(
       { _id: { $ne: employee._id } }, // Exclude the current employee
-      { $pull: { usersToReview: employee._id } }
+      { $pull: { usersToReview: employee._id } },
     );
 
     // Delete all reviews where the employee is the reviewer or the reviewee
@@ -157,14 +150,13 @@ exports.deleteEmployee = async (req, res) => {
 
     req.flash(
       'success',
-      'Employee and associated reviews successfully deleted'
+      'Employee and associated reviews successfully deleted',
     );
     res.redirect('back');
   } catch (error) {
-    console.error(error);
     req.flash(
       'error',
-      'Error occurred while deleting the employee and associated reviews'
+      'Error occurred while deleting the employee and associated reviews',
     );
     res.redirect('back');
   }

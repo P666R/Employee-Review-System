@@ -3,14 +3,13 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const expressLayouts = require('express-ejs-layouts');
 const passport = require('passport');
-const path = require('path');
 const cookieParser = require('cookie-parser');
-
-const passportLocal = require('./config/passportLocal');
-const mainRouter = require('./routes/index');
-
 const flash = require('connect-flash');
-const customMware = require('./config/middleware');
+const path = require('path');
+
+require('./config/passportLocal');
+const mainRouter = require('./routes/index');
+const setFlash = require('./config/flashMiddleware');
 
 // Create Express application
 const app = express();
@@ -51,7 +50,7 @@ app.use(
         // Set the URL of the MongoDB database
         mongoUrl: process.env.DATABASE.replace(
           '<password>',
-          process.env.DATABASE_PASSWORD
+          process.env.DATABASE_PASSWORD,
         ),
         // Set the name of the collection to store sessions
         collectionName: 'sessions',
@@ -59,11 +58,11 @@ app.use(
         autoRemove: 'disabled',
       },
       // Define a callback function to handle any errors during setup
-      function (err) {
+      (err) => {
         console.log(err || 'connect-mongodb setup');
-      }
+      },
     ),
-  })
+  }),
 );
 
 // Initialize Passport for authentication (check no longer required)
@@ -77,7 +76,7 @@ app.use(passport.setAuthenticatedUser);
 
 // Middleware to use flash messages
 app.use(flash());
-app.use(customMware.setFlash);
+app.use(setFlash);
 
 // Use the main router for handling routes starting with '/'
 app.use('/', mainRouter);

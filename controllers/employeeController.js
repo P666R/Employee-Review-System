@@ -19,7 +19,7 @@ exports.employeeDashboard = async (req, res) => {
       reviewsReceived,
     });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     req.flash('error', 'Error occurred while fetching data');
     res.redirect('back');
   }
@@ -29,7 +29,7 @@ exports.showFeedbackForm = async (req, res) => {
   try {
     // Fetch the list of reviewees from the logged-in user's usersToReview field
     const loggedInUser = await User.findById(req.user._id).populate(
-      'usersToReview'
+      'usersToReview',
     );
     const reviewees = loggedInUser.usersToReview;
 
@@ -40,7 +40,7 @@ exports.showFeedbackForm = async (req, res) => {
       user: loggedInUser,
     });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     req.flash('error', 'Error occurred while fetching data');
     res.redirect('back');
   }
@@ -80,7 +80,7 @@ exports.submitFeedback = async (req, res) => {
     req.flash('success', 'Feedback submitted successfully');
     res.redirect('back');
   } catch (error) {
-    console.error(error);
+    console.log(error);
     req.flash('error', 'Error occurred while submitting feedback');
     res.redirect('back');
   }

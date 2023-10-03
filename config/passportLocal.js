@@ -39,8 +39,8 @@ passport.use(
         console.log('Error while finding user in passport', error);
         return done(error);
       }
-    }
-  )
+    },
+  ),
 );
 
 // Serialize the user
