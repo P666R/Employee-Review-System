@@ -1,3 +1,16 @@
+# Employee-Review-System
+
+The Employee Review System is a web application that provides a user-friendly interface for managing employee information, performance reviews, and feedback. It allows administrators to efficiently track employee performance and facilitate the review process
+
+## Features
+
+- Signup/Signin for users
+- Admin can designate employees to provide reviews, update and delete employees
+- Employees can view their pending, given and received reviews
+- Employee can provide their reviews to the designated co-employees once assigned to do so by admin
+
+## Folder structure
+
 - 📂 **Employee\-Review\-System**
   - 📂 **config**
     - 📄 [flashMiddleware.js](config/flashMiddleware.js)
@@ -13,16 +26,6 @@
     - 📂 **css**
       - 📄 [style.css](public/css/style.css)
     - 📂 **img**
-      - 📄 [employee\-1.jpeg](public/img/employee-1.jpeg)
-      - 📄 [employee\-2.jpeg](public/img/employee-2.jpeg)
-      - 📄 [employee\-3.jpeg](public/img/employee-3.jpeg)
-      - 📄 [favicon.png](public/img/favicon.png)
-      - 📄 [landing.jpg](public/img/landing.jpg)
-      - 📄 [logo\-bbc.png](public/img/logo-bbc.png)
-      - 📄 [logo\-bi.png](public/img/logo-bi.png)
-      - 📄 [logo\-forbes.png](public/img/logo-forbes.png)
-      - 📄 [logo\-techcrunch.png](public/img/logo-techcrunch.png)
-      - 📄 [logo.png](public/img/logo.png)
   - 📂 **routes**
     - 📄 [adminRoutes.js](routes/adminRoutes.js)
     - 📄 [authRoutes.js](routes/authRoutes.js)
@@ -49,3 +52,17 @@
   - 📄 [package.json](package.json)
   - 📄 [readme.md](readme.md)
   - 📄 [server.js](server.js)
+
+## Installation And Usage
+
+1. git clone https://github.com/P666R/Employee-Review-System.git
+2. npm install to install all the dependencies
+3. Create config.env file in the root of project and add following data
+
+- PORT=[Your Port]
+- DATABASE=[Your DB url]
+- DATABASE_PASSWORD=[Your DB password]
+
+4. Start the application: npm start
+
+Application will be accessible at http://localhost:3000
