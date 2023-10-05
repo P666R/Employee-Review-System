@@ -9,6 +9,32 @@ The Employee Review System is a web application that provides a user-friendly in
 - Employees can view their pending, given and received reviews
 - Employee can provide their reviews to the designated co-employees once assigned to do so by admin
 
+## Home page
+
+![screen](/public/img/landing1.jpg)
+
+## Signup page
+
+![screen](/public/img/singup2.jpg)
+
+## Admin dashboard
+
+![screen](/public/img/admindashboard3.jpg)
+
+## Admin assign review
+
+![screen](/public/img/adminreview4.jpg)
+
+![screen](/public/img/adminreview5.jpg)
+
+## Employee dashboard
+
+![screen](/public/img/empdash6.jpg)
+
+## Employee feedback
+
+![screen](/public/img/empfeed7.jpg)
+
 ## Folder structure
 
 - 📂 **Employee\-Review\-System**
