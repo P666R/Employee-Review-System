@@ -32,22 +32,21 @@ The Employee Review System is a web application that provides a user-friendly in
     - 📄 [employeeRoutes.js](routes/employeeRoutes.js)
     - 📄 [index.js](routes/index.js)
   - 📂 **views**
+    - 📂 **partials**
+      - 📄 [\_footer.ejs](views/partials/_footer.ejs)
+      - 📄 [\_header.ejs](views/partials/_header.ejs)
     - 📄 [adminDashboard.ejs](views/adminDashboard.ejs)
     - 📄 [assignReviewPage.ejs](views/assignReviewPage.ejs)
     - 📄 [employeeDashboard.ejs](views/employeeDashboard.ejs)
     - 📄 [feedbackFormPage.ejs](views/feedbackFormPage.ejs)
     - 📄 [homePage.ejs](views/homePage.ejs)
     - 📄 [layout.ejs](views/layout.ejs)
-    - 📂 **partials**
-      - 📄 [\_footer.ejs](views/partials/_footer.ejs)
-      - 📄 [\_header.ejs](views/partials/_header.ejs)
     - 📄 [signinPage.ejs](views/signinPage.ejs)
     - 📄 [signupPage.ejs](views/signupPage.ejs)
   - 📄 [.eslintrc.json](.eslintrc.json)
   - 📄 [.gitignore](.gitignore)
   - 📄 [.prettierrc](.prettierrc)
   - 📄 [app.js](app.js)
-  - 📄 [config.env](config.env)
   - 📄 [package\-lock.json](package-lock.json)
   - 📄 [package.json](package.json)
   - 📄 [readme.md](readme.md)
@@ -55,8 +54,8 @@ The Employee Review System is a web application that provides a user-friendly in
 
 ## Installation And Usage
 
-1. git clone https://github.com/P666R/Employee-Review-System.git
-2. npm install to install all the dependencies
+1. Git clone https://github.com/P666R/Employee-Review-System.git
+2. Npm install to install all the dependencies
 3. Create config.env file in the root of project and add following data
 
 - PORT=[Your Port]

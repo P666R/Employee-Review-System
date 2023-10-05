@@ -87,6 +87,7 @@ exports.isAdmin = (req, res, next) => {
   next();
 };
 
+// Middleware to check if the user is not an admin
 exports.isNotAdmin = (req, res, next) => {
   if (req.user.isAdmin) {
     req.flash('error', 'Admin cannot access this page');

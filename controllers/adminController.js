@@ -1,10 +1,10 @@
 const User = require('../models/userModel');
 const Review = require('../models/reviewModel');
 
+// Fetch all employees and render the admin dashboard page
 exports.adminDashboard = async (req, res) => {
   try {
     const employees = await User.find();
-
     return res.render('adminDashboard', {
       title: 'Nexter - Admin page',
       employees,
@@ -15,18 +15,22 @@ exports.adminDashboard = async (req, res) => {
   }
 };
 
+// Toggle admin status of a user
 exports.makeAdmin = async (req, res) => {
   const { userId } = req.body;
   try {
     const user = await User.findById(userId);
     if (!user) {
+      // Handle case where user is not found
       req.flash('error', 'User not found');
       return res.redirect('back');
     }
 
+    // Toggle user's admin status
     user.isAdmin = !user.isAdmin;
     await user.save();
 
+    // Flash success message based on updated admin status
     req.flash(
       'success',
       `Employee is now ${user.isAdmin ? 'an admin' : 'not an admin'}`,
@@ -39,6 +43,7 @@ exports.makeAdmin = async (req, res) => {
   }
 };
 
+// Fetch non-admin users to be potential reviewers
 exports.getReviewers = async (req, res) => {
   try {
     const reviewers = await User.find({ isAdmin: false });
@@ -54,6 +59,7 @@ exports.getReviewers = async (req, res) => {
   }
 };
 
+// Fetch non-admin users to be potential reviewees for a selected reviewer
 exports.getReviewees = async (req, res) => {
   try {
     const { reviewerId } = req.body;
@@ -61,13 +67,13 @@ exports.getReviewees = async (req, res) => {
     // Find the selected reviewer
     const selectedReviewer = await User.findById(reviewerId);
 
-    // Find users who are not admins
+    // Find non-admin users excluding selected reviewer
     let reviewees = await User.find({
       isAdmin: false,
       _id: { $ne: reviewerId }, // Exclude the selected reviewer
     });
 
-    // If usersToReview is not empty for the selected reviewer, exclude them
+    // Exclude users already assigned for review by selected reviewer
     if (selectedReviewer.usersToReview.length > 0) {
       reviewees = reviewees.filter(
         (reviewee) =>
@@ -98,14 +104,13 @@ exports.getReviewees = async (req, res) => {
   }
 };
 
+// Assign a review for selected reviewer and reviewee
 exports.assignReview = async (req, res) => {
   try {
     const { reviewerId, revieweeId } = req.body;
 
-    // Find the selected reviewer
+    // Find the selected reviewer and reviewee
     const selectedReviewer = await User.findById(reviewerId);
-
-    // Find the selected reviewee
     const selectedReviewee = await User.findById(revieweeId);
 
     // Update the selected reviewer's usersToReview array to include the selected reviewee
@@ -114,16 +119,16 @@ exports.assignReview = async (req, res) => {
     // Save the changes to the database
     await selectedReviewer.save();
 
-    // Optionally, you can create a new Review document to store this assignment in your database.
-
+    // Flash success message for successful review assignment
     req.flash('success', 'Review assigned successfully');
-    res.redirect('/admin/assignReview'); // Redirect to the page with the list of reviewers
+    res.redirect('/admin/assignReview');
   } catch (error) {
     req.flash('error', 'Error occurred while assigning review');
-    res.redirect('/admin/assignReview'); // Redirect back to the page with the list of reviewers
+    res.redirect('/admin/assignReview');
   }
 };
 
+// Delete an employee, remove them from other users' usersToReview arrays and delete associated reviews
 exports.deleteEmployee = async (req, res) => {
   const { id } = req.params;
   try {
@@ -148,6 +153,7 @@ exports.deleteEmployee = async (req, res) => {
     // Delete the employee
     await User.findByIdAndDelete(id);
 
+    // Flash success message for successful deletion
     req.flash(
       'success',
       'Employee and associated reviews successfully deleted',
