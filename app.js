@@ -3,7 +3,6 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo');
 const expressLayouts = require('express-ejs-layouts');
 const passport = require('passport');
-const cookieParser = require('cookie-parser');
 const flash = require('connect-flash');
 const path = require('path');
 
@@ -14,7 +13,6 @@ const setFlash = require('./config/flashMiddleware');
 // Create Express application
 const app = express();
 
-app.use(cookieParser());
 // Parse URL-encoded bodies
 app.use(express.urlencoded({ extended: true }));
 
