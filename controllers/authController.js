@@ -73,9 +73,9 @@ exports.logout = (req, res) => {
       req.flash('error', 'Error during logout');
       return res.redirect('/');
     }
+    req.flash('success', 'Logged out successfully');
+    res.redirect('/');
   });
-  req.flash('success', 'Logged out successfully');
-  res.redirect('/');
 };
 
 // Middleware to check if the user is an admin
